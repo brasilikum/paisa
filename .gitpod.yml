@@ -1,0 +1,21 @@
+# Image of workspace. Learn more: https://www.gitpod.io/docs/configure/workspaces/workspace-image
+image: gitpod/workspace-full:latest
+
+# List the start up tasks. Learn more: https://www.gitpod.io/docs/configure/workspaces/tasks
+tasks:
+  - name: Frontend
+    init: npm install # runs during prebuild => https://www.gitpod.io/docs/configure/projects/prebuilds
+    command: npm run dev
+  - name: Backend
+    before: nix-build ledger.nix && cp ./result/bin/ledger internal/binary/ledger
+    init: go mod tidy # runs during prebuild => https://www.gitpod.io/docs/configure/projects/prebuilds
+    command: go run paisa.go serve
+
+# List the ports to expose. Learn more: https://www.gitpod.io/docs/configure/workspaces/ports
+ports:
+  - name: Frontend
+    description: Port 5173 for the frontend
+    port: 5173
+    onOpen: open-preview
+
+# Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
